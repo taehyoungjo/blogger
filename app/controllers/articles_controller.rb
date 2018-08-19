@@ -1,4 +1,6 @@
 class ArticlesController < ApplicationController
+  include ArticlesHelper
+  
   def index
     @articles = Article.all
   end
@@ -14,7 +16,7 @@ class ArticlesController < ApplicationController
   end
 
   def create
-    @article = Article.new(params.require(:article).permit(:title, :body))
+    @article = Article.new(article_params)
     @article.save
     flash.notice = "Article '#{@article.title}' Created!"
     redirect_to article_path(@article)
@@ -33,7 +35,7 @@ class ArticlesController < ApplicationController
 
   def update
     @article = Article.find(params[:id])
-    @article.update(params.require(:article).permit(:title, :body))
+    @article.update(article_params)
     flash.notice = "Article '#{@article.title}' Updated!"
     redirect_to article_path(@article)
   end
